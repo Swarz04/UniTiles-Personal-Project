@@ -2,6 +2,7 @@
   "name": "unitiles",
   "version": "1.0.0",
   "main": "main.js",
+  "author": "A. Scharmüller",
   "scripts": {
     "start": "electron ."
   },

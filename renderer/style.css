@@ -1,11 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap');
+
 /* General Styles */
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Revert debugging border */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     /* outline: 2px solid pink; */
     margin: 0;
     background-color: #1a1a1a; /* Dark background */
     color: #e0e0e0; /* Light text */
     overflow-x: hidden;
+    overflow-y: auto;
+    font-size: clamp(18px, 1.5vw, 24px);
 }
 
 /* Header */
@@ -23,6 +31,7 @@ body {
 }
 
 .app-header h1 {
+    font-family: 'UnifrakturMaguntia', cursive;
     margin: 0;
     font-size: 1.8em;
     color: #e50914; /* Netflix red */
@@ -44,7 +53,29 @@ body {
 }
 
 .add-button:hover {
-    background-color: #ff0a16;
+    background-color: #e50914;
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.search-bar {
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 1px solid #444;
+    background-color: #222;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', sans-serif;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-bar:focus {
+    border-color: #e50914;
+    box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.3);
 }
 
 /* Tile Grid Container */
@@ -264,7 +295,7 @@ body {
 }
 
 .form-actions button[type="submit"]:hover {
-    background-color: #ff0a16;
+    background-color: #e50914;
 }
 
 .form-actions button#cancel-add-tile-btn {

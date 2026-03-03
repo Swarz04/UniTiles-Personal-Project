@@ -1,3 +1,7 @@
+/**
+ * UniTiles - Main Process
+ * Author: A. Scharmüller
+ */
 const { app, BrowserWindow, ipcMain, shell } = require('electron');
 const path = require('path');
 const fs = require('fs');

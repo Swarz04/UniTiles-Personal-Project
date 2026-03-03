@@ -1,8 +1,13 @@
+/**
+ * UniTiles - Renderer Process
+ * Author: A. Scharmüller
+ */
 document.addEventListener('DOMContentLoaded', async () => {
     // Get DOM elements
     const tilesGrid = document.getElementById('tiles-grid');
     const addTileBtn = document.getElementById('add-tile-btn');
     const addTileDialog = document.getElementById('add-tile-dialog');
+    const searchInput = document.getElementById('search-input');
     const cancelAddTileBtn = document.getElementById('cancel-add-tile-btn');
     const tileForm = document.getElementById('tile-form');
     const tileTypeSelect = document.getElementById('tile-type');
@@ -18,12 +23,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         tilesGrid.innerHTML = ''; // Clear existing tiles
         console.log('[app.js] Rendering tiles. Current tiles array:', tiles); // Log the tiles array
 
-        if (!tiles || tiles.length === 0) {
-            tilesGrid.innerHTML = '<p style="text-align: center; color: #ccc;">Nessun tile aggiunto. Clicca "+" per iniziare!</p>';
+        const searchTerm = searchInput.value.trim().toLowerCase();
+        const filteredTiles = tiles.filter(tile => tile.title.toLowerCase().includes(searchTerm));
+
+        if (filteredTiles.length === 0) {
+            if (searchTerm) {
+                tilesGrid.innerHTML = '<p style="text-align: center; color: #ccc;">Nessun risultato trovato.</p>';
+            } else {
+                tilesGrid.innerHTML = '<p style="text-align: center; color: #ccc;">Nessun tile aggiunto. Clicca "+" per iniziare!</p>';
+            }
             return;
         }
 
-        tiles.forEach(tile => {
+        filteredTiles.forEach(tile => {
             const tileCard = document.createElement('div');
             tileCard.className = 'tile-card';
             tileCard.dataset.id = tile.id;
@@ -154,6 +166,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             tilesGrid.appendChild(tileCard);
         });
     }
+
+    // Search functionality
+    searchInput.addEventListener('input', renderTiles);
 
     // Function to load tiles from main process
     async function loadTiles() {
