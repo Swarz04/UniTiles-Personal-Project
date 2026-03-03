@@ -1,0 +1,45 @@
+[
+  {
+    "id": "1678886400000",
+    "title": "Google",
+    "subtitle": "Cerca qualsiasi cosa",
+    "type": "url",
+    "url": "https://www.google.com",
+    "style": {
+      "color": "#4285F4"
+    }
+  },
+  {
+    "id": "1678886400001",
+    "title": "Visual Studio Code",
+    "subtitle": "Il tuo editor di codice preferito",
+    "type": "exe",
+    "path": "C:\\Users\\TUO_UTENTE\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+    "args": "--new-window",
+    "style": {
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/1200px-Visual_Studio_Code_1.35_icon.svg.png"
+    }
+  },
+  {
+    "id": "1678886400002",
+    "title": "Jupyter Lab",
+    "subtitle": "Ambiente di sviluppo interattivo",
+    "type": "command",
+    "cmd": "jupyter",
+    "args": "lab",
+    "cwd": "C:\\Users\\TUO_UTENTE\\Documents\\JupyterProjects",
+    "style": {
+      "color": "#F37626"
+    }
+  },
+  {
+    "id": "1678886400003",
+    "title": "GitHub",
+    "subtitle": "Esplora progetti open source",
+    "type": "url",
+    "url": "https://github.com",
+    "style": {
+      "image": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+    }
+  }
+]

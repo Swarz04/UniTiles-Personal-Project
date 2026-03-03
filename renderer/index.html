@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A.Scharmüller - UniTiles</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="app-header">
+        <h1>A.Scharmüller - UniTiles</h1>
+        <button id="add-tile-btn" class="add-button">+</button>
+    </header>
+
+    <main class="tile-grid-container">
+        <div id="tiles-grid" class="tile-grid">
+            <!-- Tiles will be rendered here by app.js -->
+        </div>
+    </main>
+
+    <dialog id="add-tile-dialog">
+        <h2>Aggiungi Nuovo Tile</h2>
+        <form id="tile-form">
+            <div class="form-group">
+                <label for="tile-title">Titolo:</label>
+                <input type="text" id="tile-title" required>
+            </div>
+            <div class="form-group">
+                <label for="tile-subtitle">Sottotitolo:</label>
+                <input type="text" id="tile-subtitle">
+            </div>
+            <div class="form-group">
+                <label for="tile-type">Tipo:</label>
+                <select id="tile-type" required>
+                    <option value="">Seleziona un tipo</option>
+                    <option value="url">URL</option>
+                    <option value="exe">Eseguibile (.exe)</option>
+                    <option value="command">Comando</option>
+                    <option value="file">File Locale</option>
+                </select>
+            </div>
+
+            <div id="dynamic-fields">
+                <!-- Dynamic fields based on tile type will be inserted here -->
+            </div>
+
+            <div class="form-group">
+                <label for="tile-color">Colore di Sfondo (es. #RRGGBB o nome):</label>
+                <input type="text" id="tile-color" placeholder="#333333 o red">
+            </div>
+            <div class="form-group">
+                <label for="tile-image">Immagine di Sfondo (URL o percorso locale):</label>
+                <input type="text" id="tile-image" placeholder="https://example.com/image.png o C:\\path\\to\\image.png">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit">Salva Tile</button>
+                <button type="button" id="cancel-add-tile-btn">Annulla</button>
+            </div>
+        </form>
+    </dialog>
+
+    <script src="app.js"></script>
+</body>
+</html>

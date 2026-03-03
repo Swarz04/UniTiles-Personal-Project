@@ -1,0 +1,291 @@
+/* General Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Revert debugging border */
+    /* outline: 2px solid pink; */
+    margin: 0;
+    background-color: #1a1a1a; /* Dark background */
+    color: #e0e0e0; /* Light text */
+    overflow-x: hidden;
+}
+
+/* Header */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #0d0d0d;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    /* outline: 2px solid cyan; */ /* Revert debugging border */
+}
+
+.app-header h1 {
+    margin: 0;
+    font-size: 1.8em;
+    color: #e50914; /* Netflix red */
+}
+
+.add-button {
+    background-color: #e50914;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.add-button:hover {
+    background-color: #ff0a16;
+}
+
+/* Tile Grid Container */
+.tile-grid-container {
+    padding: 20px 30px;
+}
+
+/* Tile Grid */
+.tile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Default 200px min */
+    gap: 20px;
+    padding: 20px 0;
+}
+
+/* Responsive Grid */
+@media (min-width: 1600px) {
+    .tile-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1599px) {
+    .tile-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+@media (min-width: 900px) and (max-width: 1199px) {
+    .tile-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (min-width: 600px) and (max-width: 899px) {
+    .tile-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 599px) {
+    .tile-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Individual Tile */
+.tile-card {
+    background-color: #282828;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative; /* Assicura che z-index funzioni per i figli posizionati */
+    aspect-ratio: 16 / 9; /* Common aspect ratio for cards */
+    z-index: 1; /* Restore default z-index */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Align content to bottom */
+}
+
+.tile-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+}
+
+.tile-card-content {
+    padding: 15px;
+    position: relative; /* Keep relative positioning */
+    z-index: 2; /* Ensure text is above overlay */
+    color: white; /* Keep text color */
+    pointer-events: none; /* Content itself should not block clicks on buttons */
+}
+
+.tile-card-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.tile-card-subtitle {
+    font-size: 0.9em;
+    color: #cccccc;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.tile-card-image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 50%);
+    z-index: 1;
+    pointer-events: none; /* Assicura che questo overlay non blocchi mai i click */
+}
+
+.tile-delete-btn, .tile-edit-btn {
+    position: absolute;
+    top: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1em;
+    cursor: pointer;
+    opacity: 0; /* Nascosto di default */
+    transition: opacity 0.2s ease-in-out, background-color 0.2s ease;
+    z-index: 10;
+    pointer-events: auto; /* Assicura che siano cliccabili */
+}
+
+.tile-delete-btn {
+    right: 8px;
+}
+
+.tile-edit-btn {
+    right: 42px; /* Posizionato accanto al pulsante di eliminazione */
+}
+
+.tile-card:hover .tile-delete-btn,
+.tile-card:hover .tile-edit-btn {
+    opacity: 1; /* Show on hover */
+}
+
+.tile-delete-btn:hover {
+    background-color: #e50914; /* Rosso tema app */
+}
+
+.tile-edit-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Dialog (Modal) Styles */
+/* Ensure dialog is always on top for debugging */
+#add-tile-dialog { /* Keep dialog on top */
+    background-color: #282828;
+    color: #e0e0e0;
+    border: none;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.7);
+    max-width: 500px;
+    width: 90%;
+    z-index: 100000; /* Keep high z-index for dialog */
+}
+
+#add-tile-dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 99999; /* Keep high z-index for backdrop */
+}
+
+#add-tile-dialog h2 {
+    color: #e50914;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="url"],
+.form-group select {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 5px;
+    background-color: #333;
+    color: #e0e0e0;
+    font-size: 1em;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="url"]:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #e50914;
+    box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.3);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.form-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s ease;
+}
+
+.form-actions button[type="submit"] {
+    background-color: #e50914;
+    color: white;
+}
+
+.form-actions button[type="submit"]:hover {
+    background-color: #ff0a16;
+}
+
+.form-actions button#cancel-add-tile-btn {
+    background-color: #555;
+    color: white;
+}
+
+.form-actions button#cancel-add-tile-btn:hover {
+    background-color: #777;
+}
+
+/* Drag and Drop Styles */
+.tile-card.dragging {
+    opacity: 0.4;
+    border: 2px dashed #e50914;
+    cursor: grabbing;
+}
+
+.tile-card.drag-over {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(229, 9, 20, 0.6);
+    border: 2px solid #e50914;
+    z-index: 10;
+}
