@@ -10,8 +10,16 @@ Ciao! Questo è **UniTiles**, il mio progetto personale per gestire link, progra
 *   **🚀 Programmi (.exe)**: Lancia le tue applicazioni preferite (VS Code, Steam, ecc.) direttamente dalla griglia.
 *   **💻 Comandi**: Esegui comandi da terminale (utile per avviare server locali, Jupyter Lab, script Python, ecc.).
 *   **📂 File Locali**: Tieni a portata di mano PDF, appunti e documenti importanti.
+*   **☁️ Integrazione OneDrive**: I percorsi dei file su OneDrive vengono rilevati automaticamente su diversi dispositivi.
 *   **🎨 Personalizzazione**: Cambia titoli, sottotitoli, colori e immagini di sfondo per ogni riquadro.
-*   **🖱️ Drag & Drop**: Tieni premuto e trascina per riordinare i riquadri come sul telefono!
+*   **🖱️ Drag & Drop Avanzato**:
+    *   Riordina i riquadri trascinandoli.
+    *   Crea **Cartelle** trascinando un riquadro sopra un altro.
+*   **📝 Terminale Note & Calendario**:
+    *   Un'area di testo persistente nel footer per appunti rapidi.
+    *   **Calendario Interattivo**: Clicca sulla data per cambiare giorno e vedere le note passate.
+    *   **Versioning & Salvataggio**: Il sistema mantiene fino a 3 versioni storiche per ogni nota giornaliera (sovrascrittura ciclica). Il salvataggio avviene manualmente o al cambio data.
+    *   **Accesso Rapido**: Pulsante per aprire direttamente la cartella contenente i file di testo delle note.
 
 ## 🛠️ Installazione
 

@@ -8,7 +8,12 @@
 </head>
 <body>
     <header class="app-header">
-        <h1>A.Scharmüller - UniTiles</h1>
+        <div class="header-left">
+            <button id="back-btn" class="nav-button" style="display: none;" title="Indietro">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24px" height="24px"><path d="M12.707 17.293 8.414 13H18v-2H8.414l4.293-4.293-1.414-1.414L4.586 12l6.707 6.707z"/></svg>
+            </button>
+            <h1>A.Scharmüller - UniTiles</h1>
+        </div>
         <div class="header-controls">
             <button id="add-tile-btn" class="add-button">+</button>
             <input type="text" id="search-input" placeholder="Cerca..." class="search-bar">
@@ -40,6 +45,7 @@
                     <option value="exe">Eseguibile (.exe)</option>
                     <option value="command">Comando</option>
                     <option value="file">File Locale</option>
+                    <option value="folder">Cartella</option>
                 </select>
             </div>
 
@@ -62,6 +68,24 @@
             </div>
         </form>
     </dialog>
+
+    <div id="calendar-popup" class="calendar-popup" style="display: none;">
+        <div class="calendar-header">
+            <button id="prev-month">&lt;</button>
+            <span id="calendar-month-year"></span>
+            <button id="next-month">&gt;</button>
+        </div>
+        <div class="calendar-days-header"></div>
+        <div class="calendar-grid" id="calendar-grid"></div>
+    </div>
+
+    <footer class="app-footer">
+        <div id="date-display" class="footer-item"></div>
+        <textarea id="terminal-input" class="footer-item terminal-input" placeholder=">_"></textarea>
+        <button id="save-note-btn" class="footer-item nav-button" style="width: 35px; height: 35px; font-size: 1.2em; margin-left: 10px; background-color: #333;" title="Salva nota del giorno">💾</button>
+        <button id="open-notes-btn" class="footer-item nav-button" style="width: 35px; height: 35px; font-size: 1.2em; margin-left: 5px; background-color: #333;" title="Apri cartella note">📂</button>
+        <div id="clock-display" class="footer-item"></div>
+    </footer>
 
     <script src="app.js"></script>
 </body>
