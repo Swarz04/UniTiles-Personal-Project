@@ -7,13 +7,12 @@ html {
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    /* outline: 2px solid pink; */
     margin: 0;
-    background-color: #1a1a1a; /* Dark background */
-    color: #e0e0e0; /* Light text */
+    background-color: #1a1a1a;
+    color: #e0e0e0;
     overflow-x: hidden;
     overflow-y: auto;
-    font-size: clamp(18px, 1.5vw, 24px);
+    font-size: 16px; /* Base font size */
 }
 
 /* Header */
@@ -27,23 +26,52 @@ body {
     position: sticky;
     top: 0;
     z-index: 1000;
-    /* outline: 2px solid cyan; */ /* Revert debugging border */
 }
 
-.app-header h1 {
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-grow: 1;
+    min-width: 0;
+}
+
+#app-title {
     font-family: 'UnifrakturMaguntia', cursive;
     margin: 0;
-    font-size: 1.8em;
-    color: #e50914; /* Netflix red */
+    font-size: 2em;
+    color: #e50914;
+    white-space: nowrap;
+}
+
+.breadcrumb-container {
+    display: flex;
+    align-items: center;
+    color: #aaa;
+    font-size: 0.9em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.breadcrumb-separator {
+    margin: 0 8px;
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .add-button, .nav-button {
-    background-color: #e50914;
+    background-color: #333;
     color: white;
     border: none;
     border-radius: 50%;
     width: 40px;
     height: 40px;
+    font-size: 1.5em;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -55,18 +83,6 @@ body {
     background-color: #e50914;
 }
 
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.header-controls {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
 .search-bar {
     padding: 8px 15px;
     border-radius: 20px;
@@ -75,7 +91,7 @@ body {
     color: #e0e0e0;
     font-family: 'Segoe UI', sans-serif;
     outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .search-bar:focus {
@@ -83,48 +99,16 @@ body {
     box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.3);
 }
 
-/* Tile Grid Container */
+/* Tile Grid */
 .tile-grid-container {
     padding: 20px 30px;
 }
 
-/* Tile Grid */
 .tile-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Default 200px min */
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 20px;
     padding: 20px 0;
-}
-
-/* Responsive Grid */
-@media (min-width: 1600px) {
-    .tile-grid {
-        grid-template-columns: repeat(6, 1fr);
-    }
-}
-
-@media (min-width: 1200px) and (max-width: 1599px) {
-    .tile-grid {
-        grid-template-columns: repeat(5, 1fr);
-    }
-}
-
-@media (min-width: 900px) and (max-width: 1199px) {
-    .tile-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-@media (min-width: 600px) and (max-width: 899px) {
-    .tile-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (max-width: 599px) {
-    .tile-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
 }
 
 /* Individual Tile */
@@ -136,12 +120,14 @@ body {
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    position: relative; /* Assicura che z-index funzioni per i figli posizionati */
-    aspect-ratio: 16 / 9; /* Common aspect ratio for cards */
-    z-index: 1; /* Restore default z-index */
+    aspect-ratio: 16 / 9;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end; /* Align content to bottom */
+    justify-content: flex-end;
+}
+
+.tile-card.ghost {
+    opacity: 0.5;
 }
 
 .tile-card:hover {
@@ -150,26 +136,31 @@ body {
 }
 
 .tile-card-content {
-    padding: 15px 15px 1px 10px;
-    position: relative; /* Keep relative positioning */
-    z-index: 2; /* Ensure text is above overlay */
-    color: white; /* Keep text color */
-    pointer-events: none; /* Content itself should not block clicks on buttons */
+    padding: 10px 15px;
+    position: relative;
+    z-index: 2;
+    color: white;
+    pointer-events: none;
 }
 
 .tile-card-title {
-    font-size: 1.2em;
+    font-size: 1.1em;
     font-weight: bold;
-    margin-bottom: 5px;
+    margin: 0 0 4px 0;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
-    margin-top: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .tile-card-subtitle {
-    font-size: 0.9em;
+    font-size: 0.8em;
     color: #cccccc;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .tile-card-image-overlay {
@@ -180,7 +171,7 @@ body {
     height: 100%;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 50%);
     z-index: 1;
-    pointer-events: none; /* Assicura che questo overlay non blocchi mai i click */
+    pointer-events: none;
 }
 
 .tile-delete-btn, .tile-edit-btn {
@@ -197,36 +188,34 @@ body {
     justify-content: center;
     font-size: 1em;
     cursor: pointer;
-    opacity: 0; /* Nascosto di default */
+    opacity: 0;
     transition: opacity 0.2s ease-in-out, background-color 0.2s ease;
     z-index: 10;
-    pointer-events: auto; /* Assicura che siano cliccabili */
+    pointer-events: auto;
 }
 
-.tile-delete-btn {
-    right: 8px;
-}
-
-.tile-edit-btn {
-    right: 42px; /* Posizionato accanto al pulsante di eliminazione */
-}
+.tile-delete-btn { right: 8px; }
+.tile-edit-btn { right: 42px; }
 
 .tile-card:hover .tile-delete-btn,
 .tile-card:hover .tile-edit-btn {
-    opacity: 1; /* Show on hover */
+    opacity: 1;
 }
 
-.tile-delete-btn:hover {
-    background-color: #e50914; /* Rosso tema app */
+.tile-delete-btn:hover { background-color: #e50914; }
+.tile-edit-btn:hover { background-color: rgba(0, 0, 0, 0.8); }
+
+.ghost-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    font-size: 1.2em;
+    z-index: 5;
+    text-shadow: 0 0 5px black;
 }
 
-.tile-edit-btn:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-}
-
-/* Dialog (Modal) Styles */
-/* Ensure dialog is always on top for debugging */
-#add-tile-dialog { /* Keep dialog on top */
+/* Dialog (Modal) */
+#add-tile-dialog {
     background-color: #282828;
     color: #e0e0e0;
     border: none;
@@ -235,35 +224,35 @@ body {
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.7);
     max-width: 500px;
     width: 90%;
-    z-index: 100000; /* Keep high z-index for dialog */
+    z-index: 100000;
 }
 
 #add-tile-dialog::backdrop {
     background-color: rgba(0, 0, 0, 0.7);
-    z-index: 99999; /* Keep high z-index for backdrop */
+    z-index: 99999;
 }
 
+#settings-dialog {
+    background-color: #282828;
+    color: #e0e0e0;
+    border: none;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.7);
+    max-width: 400px;
+    width: 90%;
+    z-index: 100000;
+}
 #add-tile-dialog h2 {
     color: #e50914;
-    margin-top: 0;
-    margin-bottom: 20px;
+    margin: 0 0 20px 0;
     text-align: center;
 }
 
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.form-group input[type="text"],
-.form-group input[type="url"],
-.form-group select {
-    width: calc(100% - 20px);
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+.form-group input, .form-group select, .form-group textarea {
+    width: calc(100% - 22px);
     padding: 10px;
     border: 1px solid #444;
     border-radius: 5px;
@@ -271,89 +260,32 @@ body {
     color: #e0e0e0;
     font-size: 1em;
 }
-
-.form-group input[type="text"]:focus,
-.form-group input[type="url"]:focus,
-.form-group select:focus {
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
     outline: none;
     border-color: #e50914;
     box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.3);
 }
 
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 25px;
-}
+.form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px; }
+.form-actions button { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; transition: background-color 0.2s ease; }
+.form-actions button[type="submit"] { background-color: #e50914; color: white; }
+.form-actions button[type="submit"]:hover { background-color: #c40812; }
+.form-actions button#cancel-add-tile-btn { background-color: #555; color: white; }
+.form-actions button#cancel-add-tile-btn:hover { background-color: #777; }
 
-.form-actions button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.2s ease;
+#settings-dialog h2 {
+    color: #e50914;
+    margin-top: 0;
 }
+/* Drag and Drop */
+.tile-card.dragging { opacity: 0.4; border: 2px dashed #e50914; cursor: grabbing; }
+.tile-card.drag-over { transform: scale(1.05); box-shadow: 0 0 15px rgba(229, 9, 20, 0.6); border: 2px solid #e50914; z-index: 10; }
+.nav-button.drag-over { transform: scale(1.1); background-color: #ff4d4d; box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
 
-.terminal-input {
-    /* flex-grow: 1; */ /* Commenta o rimuovi questa riga per non occupare tutto lo spazio */
-    width: 70%; /* Imposta qui la larghezza desiderata (es. 70%, 600px, ecc.) */
-    background-color: rgba(255, 255, 255, 0.1); /* Sfondo leggermente trasparente */
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    color: #0f0; /* Colore verde stile terminale */
-    font-family: 'Courier New', Courier, monospace;
-    text-align: left;
-    outline: none;
-    font-size: 1.1em;
-    padding: 8px; /* Un po' più alto */
-    margin: 0;
-    min-width: 50px;
-    resize: both;
-    height: 60px;
-    overflow-y: auto;
-}
-
-.form-actions button[type="submit"] {
-    background-color: #e50914;
-    color: white;
-}
-
-.form-actions button[type="submit"]:hover {
-    background-color: #e50914;
-}
-
-.form-actions button#cancel-add-tile-btn {
-    background-color: #555;
-    color: white;
-}
-
-.form-actions button#cancel-add-tile-btn:hover {
-    background-color: #777;
-}
-
-/* Drag and Drop Styles */
-.tile-card.dragging {
-    opacity: 0.4;
-    border: 2px dashed #e50914;
-    cursor: grabbing;
-}
-
-.tile-card.drag-over {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(229, 9, 20, 0.6);
-    border: 2px solid #e50914;
-    z-index: 10;
-}
-
-/* Folder Preview Styles */
+/* Folder Preview */
 .folder-preview {
     position: absolute;
-    top: 15px;
-    left: 15px;
-    right: 15px;
-    bottom: 60px; /* Leave space for title/subtitle */
+    top: 10px; left: 10px; right: 10px; bottom: 50px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
@@ -363,25 +295,12 @@ body {
     padding: 4px;
     pointer-events: none;
 }
+.mini-tile { background-color: #444; border-radius: 4px; background-size: cover; background-position: center; }
 
-.mini-tile {
-    background-color: #444;
-    border-radius: 4px;
-    background-size: cover;
-    background-position: center;
-}
-
-.nav-button.drag-over {
-    transform: scale(1.1);
-    background-color: #ff4d4d;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-}
-
-/* Footer Styles */
+/* Footer */
 .app-footer {
     position: fixed;
-    bottom: 0;
-    left: 0;
+    bottom: 0; left: 0;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -391,22 +310,46 @@ body {
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
     z-index: 1000;
     color: #ccc;
-    font-size: 0.8em;
+    font-size: 0.9em;
     box-sizing: border-box;
+    gap: 20px;
 }
 
-.footer-item {
-    font-family: 'Segoe UI', sans-serif;
-    font-weight: 600;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-    cursor: pointer; /* Indica che è cliccabile */
+.footer-item { font-family: 'Segoe UI', sans-serif; font-weight: 600; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); flex-shrink: 0; }
+#date-display { cursor: pointer; }
+
+.terminal-input {
+    flex-grow: 1;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #0f0;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: left;
+    outline: none;
+    font-size: 1em;
+    padding: 8px;
+    margin: 0;
+    min-width: 50px;
+    resize: vertical;
+    height: 40px;
+    overflow-y: auto;
 }
 
-/* Calendar Popup Styles */
+.footer-buttons { display: flex; gap: 5px; }
+.footer-btn {
+    background-color: #333; color: white; border: none; border-radius: 50%;
+    width: 35px; height: 35px; font-size: 1.2em;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: background-color 0.2s ease;
+}
+.footer-btn:hover { background-color: #555; }
+.footer-btn.saved { background-color: #28a745; }
+
+/* Calendar Popup */
 .calendar-popup {
     position: fixed;
-    bottom: 50px; /* Sopra il footer */
-    left: 20px;
+    bottom: 50px; left: 20px;
     background-color: #222;
     border: 1px solid #444;
     border-radius: 8px;
@@ -416,64 +359,12 @@ body {
     width: 280px;
     font-family: 'Segoe UI', sans-serif;
 }
-
-.calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    color: #e50914;
-    font-weight: bold;
-}
-
-.calendar-header button {
-    background: none;
-    border: none;
-    color: #e0e0e0;
-    cursor: pointer;
-    font-size: 1.2em;
-}
-
-.calendar-header button:hover {
-    color: #e50914;
-}
-
-.calendar-days-header {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    text-align: center;
-    font-size: 0.8em;
-    color: #888;
-    margin-bottom: 5px;
-}
-
-.calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 2px;
-}
-
-.calendar-day {
-    text-align: center;
-    padding: 5px;
-    font-size: 0.9em;
-    cursor: default;
-    border-radius: 4px;
-}
-
-.calendar-day.today {
-    background-color: #e50914;
-    color: white;
-    font-weight: bold;
-}
-
-.calendar-day.selected {
-    border: 2px solid #e50914;
-    background-color: rgba(229, 9, 20, 0.2);
-    font-weight: bold;
-}
-
-.calendar-day:hover:not(.empty) {
-    background-color: #444;
-}
-}
+.calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; color: #e50914; font-weight: bold; }
+.calendar-header button { background: none; border: none; color: #e0e0e0; cursor: pointer; font-size: 1.2em; }
+.calendar-header button:hover { color: #e50914; }
+.calendar-days-header { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 0.8em; color: #888; margin-bottom: 5px; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.calendar-day { text-align: center; padding: 5px; font-size: 0.9em; cursor: pointer; border-radius: 4px; }
+.calendar-day.today { background-color: #e50914; color: white; font-weight: bold; }
+.calendar-day.selected { border: 2px solid #e50914; background-color: rgba(229, 9, 20, 0.2); font-weight: bold; }
+.calendar-day:hover:not(.empty) { background-color: #444; }

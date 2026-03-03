@@ -1,45 +1,70 @@
 [
   {
-    "id": "1678886400000",
+    "id": "1700000000001",
     "title": "Google",
-    "subtitle": "Cerca qualsiasi cosa",
-    "type": "url",
-    "url": "https://www.google.com",
+    "subtitle": "Motore di ricerca",
+    "kind": "url",
+    "parentId": null,
+    "order": 10,
     "style": {
-      "color": "#4285F4"
+      "color": "#4285F4",
+      "image": null
+    },
+    "data": {
+      "url": "https://www.google.com"
     }
   },
   {
-    "id": "1678886400001",
-    "title": "Visual Studio Code",
-    "subtitle": "Il tuo editor di codice preferito",
-    "type": "exe",
-    "path": "C:\\Users\\TUO_UTENTE\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
-    "args": "--new-window",
+    "id": "1700000000002",
+    "title": "VS Code",
+    "subtitle": "Editor di codice",
+    "kind": "exe",
+    "parentId": null,
+    "order": 20,
     "style": {
+      "color": null,
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/1200px-Visual_Studio_Code_1.35_icon.svg.png"
+    },
+    "data": {
+      "path": "%USERPROFILE%\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+      "args": [
+        "--new-window"
+      ]
     }
   },
   {
-    "id": "1678886400002",
-    "title": "Jupyter Lab",
-    "subtitle": "Ambiente di sviluppo interattivo",
-    "type": "command",
-    "cmd": "jupyter",
-    "args": "lab",
-    "cwd": "C:\\Users\\TUO_UTENTE\\Documents\\JupyterProjects",
+    "id": "1700000000003",
+    "title": "Jupyter",
+    "subtitle": "Notebook interattivo",
+    "kind": "command",
+    "parentId": null,
+    "order": 30,
     "style": {
-      "color": "#F37626"
+      "color": "#F37626",
+      "image": null
+    },
+    "data": {
+      "command": "jupyter",
+      "args": [
+        "lab"
+      ],
+      "cwd": "%USERPROFILE%\\Documents",
+      "shell": true
     }
   },
   {
-    "id": "1678886400003",
-    "title": "GitHub",
-    "subtitle": "Esplora progetti open source",
-    "type": "url",
-    "url": "https://github.com",
+    "id": "1700000000004",
+    "title": "Appunti",
+    "subtitle": "Note PDF",
+    "kind": "file",
+    "parentId": null,
+    "order": 40,
     "style": {
-      "image": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+      "color": null,
+      "image": "https://www.pcprofessionale.it/wp-content/uploads/2018/12/Cartella.jpg"
+    },
+    "data": {
+      "path": "%ONEDRIVE%\\Documenti\\Appunti.pdf"
     }
   }
 ]
