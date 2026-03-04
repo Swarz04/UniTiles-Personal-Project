@@ -6,7 +6,7 @@
   "author": "A. Scharmüller",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder"
+    "dist": "electron-builder"
   },
   "dependencies": {
   },
@@ -22,7 +22,7 @@
         "nsis",
         "portable"
       ],
-      "icon": "build/icon.ico"
+      "icon": "assets/icon.ico"
     }
   }
 }
