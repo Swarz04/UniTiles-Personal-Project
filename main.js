@@ -31,12 +31,9 @@ function initializePaths() {
 
     // Bootstrap: Local -> AppData (Migration) -> Example
     if (!fs.existsSync(tilesFilePath) || fs.statSync(tilesFilePath).size === 0) {
-        const localTilesPath = path.join(__dirname, 'data', 'tiles.json');
         const examplePath = path.join(__dirname, 'data', 'tiles.example.json');
 
-        if (fs.existsSync(localTilesPath) && fs.statSync(localTilesPath).size > 0) {
-            fs.copyFileSync(localTilesPath, tilesFilePath); // Migrate local data
-        } else if (fs.existsSync(examplePath)) {
+        if (fs.existsSync(examplePath)) {
             fs.copyFileSync(examplePath, tilesFilePath);
         }
     }
