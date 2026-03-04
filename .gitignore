@@ -1,6 +1,105 @@
+# --- Dependencies ---
 node_modules/
+
+# --- Electron build outputs ---
 dist/
 out/
 build/
-.DS_Store
+release/
+*.exe
+*.msi
+*.dmg
+*.AppImage
+
+# --- Logs ---
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# --- VS Code ---
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+
+# --- Electron/Chromium caches (only if they ever land in repo) ---
+Cache/
+GPUCache/
+Code Cache/
+DawnCache/
+Crashpad/
+Crash Reports/
+User Data/
+
+# --- Local env / secrets ---
+.env
+.env.*
+*.pem
+*.key
+
+# --- UniTiles local runtime/user data (DO NOT COMMIT) ---
+data/tiles.json
+data/tiles.private.json
+data/tiles.local.json
+data/notes/
+# --- Dependencies ---
+node_modules/
+
+# --- Electron build outputs ---
+dist/
+out/
+build/
+!build/icon.ico
+release/
+*.exe
+*.msi
+*.dmg
+*.AppImage
+
+# --- Logs ---
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# --- VS Code ---
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+
+# --- Electron/Chromium caches (only if they ever land in repo) ---
+Cache/
+GPUCache/
+Code Cache/
+DawnCache/
+Crashpad/
+Crash Reports/
+User Data/
+
+# --- Local env / secrets ---
+.env
+.env.*
+*.pem
+*.key
+
+# --- UniTiles local runtime/user data (DO NOT COMMIT) ---
+data/tiles.json
+data/tiles.private.json
+data/tiles.local.json
+data/notes/
+notes/
+notes/

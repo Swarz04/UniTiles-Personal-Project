@@ -20,6 +20,7 @@ let mainWindow;
 let userDataPath;
 let tilesFilePath;
 let imagesDirPath;
+let notesDirPath;
 
 // --- Path Management ---
 const pathPlaceholders = {};
@@ -27,10 +28,53 @@ const pathPlaceholders = {};
 function initializePaths() {
     userDataPath = app.getPath('userData');
     tilesFilePath = path.join(userDataPath, 'tiles.json');
+
+    // Bootstrap: Local -> AppData (Migration) -> Example
+    if (!fs.existsSync(tilesFilePath) || fs.statSync(tilesFilePath).size === 0) {
+        const localTilesPath = path.join(__dirname, 'data', 'tiles.json');
+        const examplePath = path.join(__dirname, 'data', 'tiles.example.json');
+
+        if (fs.existsSync(localTilesPath) && fs.statSync(localTilesPath).size > 0) {
+            fs.copyFileSync(localTilesPath, tilesFilePath); // Migrate local data
+        } else if (fs.existsSync(examplePath)) {
+            fs.copyFileSync(examplePath, tilesFilePath);
+        }
+    }
+
     imagesDirPath = path.join(userDataPath, 'images');
     if (!fs.existsSync(imagesDirPath)) {
         fs.mkdirSync(imagesDirPath, { recursive: true });
     }
+
+    // Notes Path Setup
+    notesDirPath = path.join(userDataPath, 'notes');
+    if (!fs.existsSync(notesDirPath)) {
+        fs.mkdirSync(notesDirPath, { recursive: true });
+    }
+
+    // Migrate Notes from Local to AppData
+    const localNotesDir = path.join(__dirname, 'data', 'notes');
+    if (fs.existsSync(localNotesDir)) {
+        try {
+            const items = fs.readdirSync(localNotesDir);
+            for (const item of items) {
+                const srcPath = path.join(localNotesDir, item);
+                if (fs.lstatSync(srcPath).isDirectory()) {
+                    const destPath = path.join(notesDirPath, item);
+                    if (!fs.existsSync(destPath)) {
+                        fs.mkdirSync(destPath, { recursive: true });
+                        const files = fs.readdirSync(srcPath);
+                        for (const file of files) {
+                            fs.copyFileSync(path.join(srcPath, file), path.join(destPath, file));
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+            console.error('Notes migration failed:', e);
+        }
+    }
+
     pathPlaceholders['%APPDATA%'] = userDataPath;
     pathPlaceholders['%ONEDRIVE%'] = process.env.OneDrive || path.join(os.homedir(), 'OneDrive');
     pathPlaceholders['%USERPROFILE%'] = os.homedir();
@@ -152,6 +196,7 @@ function createWindow() {
         height: 800,
         minWidth: 800,
         minHeight: 600,
+        icon: path.join(__dirname, 'assets', 'icon.ico'),
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
@@ -188,7 +233,7 @@ ipcMain.handle('app:getVersion', () => {
 ipcMain.handle('tiles:get', async () => {
     try {
         if (!fs.existsSync(tilesFilePath)) {
-            const defaultTilesPath = path.join(__dirname, 'data', 'tiles.json');
+            const defaultTilesPath = path.join(__dirname, 'data', 'tiles.example.json');
             if (fs.existsSync(defaultTilesPath)) {
                 fs.copyFileSync(defaultTilesPath, tilesFilePath);
             } else {
@@ -198,7 +243,12 @@ ipcMain.handle('tiles:get', async () => {
         const data = fs.readFileSync(tilesFilePath, 'utf8');
         return JSON.parse(data);
     } catch (error) {
-        console.error('Failed to read tiles.json:', error);
+        console.error('Failed to read tiles.json (corrupt), resetting:', error);
+        const defaultTilesPath = path.join(__dirname, 'data', 'tiles.example.json');
+        if (fs.existsSync(defaultTilesPath)) {
+            fs.copyFileSync(defaultTilesPath, tilesFilePath);
+            return JSON.parse(fs.readFileSync(tilesFilePath, 'utf8'));
+        }
         return [];
     }
 });
@@ -337,10 +387,9 @@ ipcMain.handle('tile:isDirectory', async (event, p) => {
 
 // --- Notes Management ---
 function getNotePaths(date) {
-    const notesDir = path.join(userDataPath, 'notes');
-    const dateDir = path.join(notesDir, date);
+    const dateDir = path.join(notesDirPath, date);
     const metadataPath = path.join(dateDir, 'metadata.json');
-    return { notesDir, dateDir, metadataPath };
+    return { notesDir: notesDirPath, dateDir, metadataPath };
 }
 
 ipcMain.handle('note:save', async (event, { date, content }) => {
@@ -404,9 +453,8 @@ ipcMain.handle('note:get', async (event, date) => {
 });
 
 ipcMain.handle('notes:openFolder', async () => {
-    const notesDir = path.join(userDataPath, 'notes');
-    if (!fs.existsSync(notesDir)) {
-        fs.mkdirSync(notesDir, { recursive: true });
+    if (!fs.existsSync(notesDirPath)) {
+        fs.mkdirSync(notesDirPath, { recursive: true });
     }
-    await shell.openPath(notesDir);
+    await shell.openPath(notesDirPath);
 });
