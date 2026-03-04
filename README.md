@@ -50,6 +50,28 @@ npm start
 *   **Salvataggio Dati**: I dati dei tuoi riquadri (`tiles.json`) e le tue **note** vengono salvati automaticamente nella cartella dei dati utente del tuo sistema operativo (su Windows è in `%AppData%\UniTiles`). Questo assicura che i tuoi dati siano al sicuro anche se aggiorni o sposti la cartella del programma.
 *   Se scarichi l'applicazione da Git su un altro PC, ricordati di entrare nella cartella e lanciare `npm install` per scaricare le dipendenze necessarie.
 
+## 📦 Creare l'eseguibile (.exe)
+
+Se vuoi creare un file di installazione per Windows:
+
+1.  Installa lo strumento di build (se non lo hai già fatto):
+    ```bash
+    npm install electron-builder --save-dev
+    ```
+
+2.  Assicurati che il tuo `package.json` abbia lo script di build:
+    ```json
+    "scripts": {
+      "dist": "electron-builder"
+    }
+    ```
+
+3.  Genera l'eseguibile:
+    ```bash
+    npm run dist
+    ```
+    Troverai il file `.exe` nella cartella `dist` che verrà creata.
+
 ---
 
 *Progetto realizzato da A. Scharmüller*
