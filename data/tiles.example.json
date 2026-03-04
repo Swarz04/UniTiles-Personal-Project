@@ -23,7 +23,7 @@
     "order": 20,
     "style": {
       "color": null,
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/1200px-Visual_Studio_Code_1.35_icon.svg.png"
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/512px-Visual_Studio_Code_1.35_icon.svg.png"
     },
     "data": {
       "path": "%USERPROFILE%\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
@@ -61,7 +61,7 @@
     "order": 40,
     "style": {
       "color": null,
-      "image": "https://www.pcprofessionale.it/wp-content/uploads/2018/12/Cartella.jpg"
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/OneDrive_Folder_Icon.svg/512px-OneDrive_Folder_Icon.svg.png"
     },
     "data": {
       "path": "%ONEDRIVE%\\Documenti\\Appunti.pdf"
