@@ -68,6 +68,9 @@ Se vuoi creare un file di installazione per Windows:
     "build": {
       "nsis": {
         "artifactName": "${productName} Setup.${ext}"
+      },
+      "portable": {
+        "artifactName": "${productName} Portable.${ext}"
       }
     }
     ```
@@ -78,6 +81,16 @@ Se vuoi creare un file di installazione per Windows:
     npm run dist
     ```
     Troverai il file `.exe` nella cartella `dist` che verrà creata.
+
+## 🔄 Backup e Migrazione
+
+Per spostare i tuoi dati (Tiles, Immagini, Note) su un altro PC usando la funzione integrata:
+
+1.  **Sul vecchio PC**: Apri le Impostazioni ⚙️, clicca su **Esporta** e salva il file `.zip`.
+2.  **Sul nuovo PC**:
+    *   Installa/Avvia UniTiles (puoi usare l'eseguibile `Portable` creato in precedenza).
+    *   Apri le Impostazioni ⚙️, clicca su **Importa** e seleziona il file `.zip`.
+    *   L'app si riavvierà con tutti i tuoi dati pronti all'uso.
 
 ## 📜 Changelog
 
