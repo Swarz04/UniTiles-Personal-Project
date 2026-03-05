@@ -18,6 +18,12 @@
   "build": {
     "appId": "com.ascharmueller.unitiles",
     "productName": "UniTiles",
+    "nsis": {
+      "artifactName": "${productName} Setup.${ext}"
+    },
+    "portable": {
+      "artifactName": "${productName} Portable.${ext}"
+    },
     "win": {
       "target": [
         "nsis",

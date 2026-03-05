@@ -17,8 +17,9 @@ Ciao! Questo è **UniTiles**, il mio progetto personale per gestire link, progra
     *   Crea **Cartelle** trascinando un riquadro sopra un altro.
     *   Sposta elementi fuori dalle cartelle trascinandoli sul pulsante "Indietro".
 *   **⚙️ Impostazioni**: Visualizza le informazioni sulla versione e sull'autore.
-*   **📝 Terminale Note & Calendario**:
-    *   Un'area di testo persistente nel footer per appunti rapidi.
+*   **📦 Importa / Esporta**: Crea backup completi (.zip) della tua configurazione, incluse le immagini personalizzate, per trasferirle facilmente su altri dispositivi.
+*   ** Terminale Note & Calendario**:
+    *   **Sidebar Dedicata**: Un'area di testo persistente nella colonna laterale per appunti rapidi.
     *   **Calendario Interattivo**: Clicca sulla data per cambiare giorno e vedere le note passate.
     *   **Versioning & Salvataggio**: Il sistema mantiene fino a 3 versioni storiche per ogni nota giornaliera (sovrascrittura ciclica). Il salvataggio avviene manualmente o al cambio data.
     *   **Accesso Rapido**: Pulsante per aprire direttamente la cartella contenente i file di testo delle note.
@@ -63,14 +64,28 @@ Se vuoi creare un file di installazione per Windows:
     ```json
     "scripts": {
       "dist": "electron-builder"
+    },
+    "build": {
+      "nsis": {
+        "artifactName": "${productName} Setup.${ext}"
+      }
     }
     ```
+    > **Nota:** La configurazione `artifactName` dentro `nsis` serve a generare un file di installazione con nome fisso (es. `UniTiles Setup.exe`) invece di includere la versione. In questo modo, ogni nuova build sovrascriverà la precedente senza lasciare vecchi file.
 
 3.  Genera l'eseguibile:
     ```bash
     npm run dist
     ```
     Troverai il file `.exe` nella cartella `dist` che verrà creata.
+
+## 📜 Changelog
+
+### v2.1.0
+*   **Nuova Sidebar Note**: Spostata l'area note in una colonna laterale ridimensionabile a sinistra per una migliore organizzazione.
+*   **Layout Responsive**: L'interfaccia ora si adatta fluidamente a finestre di qualsiasi dimensione.
+*   **Footer Migliorato**: Barra di stato fissa in basso con orologio e data sempre visibili.
+*   **Miglioramenti UI**: Font e colori aggiornati per una migliore leggibilità.
 
 ---
 
