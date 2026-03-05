@@ -1,5 +1,5 @@
 /**
- * UniTiles - Main Process (v2.0)
+ * UniTiles - Main Process (v2.1.0)
  * Author: A. Scharmüller
  */
 const { app, BrowserWindow, ipcMain, shell, dialog } = require('electron');
@@ -9,6 +9,7 @@ const { spawn } = require('child_process');
 const os = require('os');
 const https = require('https');
 const http = require('http');
+const JSZip = require('jszip');
 
 // Disable hardware acceleration to fix GPU cache errors
 app.disableHardwareAcceleration();
@@ -191,8 +192,8 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1200,
         height: 800,
-        minWidth: 800,
-        minHeight: 600,
+        minWidth: 360,
+        minHeight: 400,
         icon: path.join(__dirname, 'build', 'icon.ico'),
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
@@ -381,6 +382,130 @@ ipcMain.handle('tile:isDirectory', async (event, p) => {
     return fs.existsSync(resolvedPath) && fs.lstatSync(resolvedPath).isDirectory();
 });
 
+// --- Data Import/Export ---
+ipcMain.handle('data:export', async (event, tiles) => {
+    try {
+        // 1. Ask user where to save the file
+        const { filePath } = await dialog.showSaveDialog(mainWindow, {
+            title: 'Esporta Dati UniTiles',
+            defaultPath: `unitiles_backup_${Date.now()}.zip`,
+            filters: [{ name: 'UniTiles Backup', extensions: ['zip'] }]
+        });
+
+        if (!filePath) {
+            return { success: false, reason: 'cancelled' };
+        }
+
+        const zip = new JSZip();
+        const tilesToExport = JSON.parse(JSON.stringify(tiles)); // Deep copy
+        const iconsToPack = new Map(); // Use a map to avoid duplicate icon processing
+
+        // 2. Process tiles and find local images
+        for (const tile of tilesToExport) {
+            if (tile.style && tile.style.image) {
+                const imagePath = tile.style.image;
+                // We only care about local, non-URL paths. Placeholders are local.
+                if (!imagePath.startsWith('http') && !imagePath.startsWith('data:')) {
+                    const resolvedPath = resolvePath(imagePath);
+                    if (fs.existsSync(resolvedPath) && !iconsToPack.has(resolvedPath)) {
+                        const iconFileName = path.basename(resolvedPath);
+                        // Store the resolved path and the new relative path for the zip
+                        iconsToPack.set(resolvedPath, `icons/${iconFileName}`);
+                    }
+                }
+            }
+        }
+
+        // 3. Read icon files and add them to the zip
+        for (const [resolvedPath, zipPath] of iconsToPack.entries()) {
+            try {
+                const iconData = fs.readFileSync(resolvedPath);
+                zip.file(zipPath, iconData);
+            } catch (err) {
+                console.warn(`Could not read icon file for export: ${resolvedPath}`, err);
+                // If we can't read an icon, we can decide to either fail the export
+                // or just skip this icon. For robustness, we'll skip it.
+                // We also need to remove it from our map so we don't change the path in the JSON
+                iconsToPack.delete(resolvedPath);
+            }
+        }
+
+        // 4. Update tile data to use relative icon paths
+        const reverseIconMap = new Map(Array.from(iconsToPack.entries()).map(([k, v]) => [k,v]));
+        for (const tile of tilesToExport) {
+             if (tile.style && tile.style.image) {
+                const resolvedPath = resolvePath(tile.style.image);
+                if (reverseIconMap.has(resolvedPath)) {
+                    tile.style.image = reverseIconMap.get(resolvedPath);
+                }
+            }
+        }
+
+        // 5. Add the JSON data to the zip
+        zip.file('data.json', JSON.stringify(tilesToExport, null, 2));
+
+        // 6. Generate and save the zip file
+        const zipContent = await zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE' });
+        fs.writeFileSync(filePath, zipContent);
+
+        return { success: true, path: filePath };
+
+    } catch (error) {
+        console.error('Failed to export data:', error);
+        dialog.showErrorBox('Export Fallito', `Si è verificato un errore durante l'esportazione dei dati:\n\n${error.message}`);
+        return { success: false, error: error.message };
+    }
+});
+
+ipcMain.handle('data:import', async () => {
+    try {
+        const { filePaths, canceled } = await dialog.showOpenDialog(mainWindow, {
+            title: 'Importa Backup UniTiles',
+            filters: [{ name: 'UniTiles Backup', extensions: ['zip'] }],
+            properties: ['openFile']
+        });
+
+        if (canceled || filePaths.length === 0) return { success: false, reason: 'cancelled' };
+
+        const zipContent = fs.readFileSync(filePaths[0]);
+        const zip = await JSZip.loadAsync(zipContent);
+
+        if (!zip.file('data.json')) {
+            throw new Error('Backup non valido: data.json mancante.');
+        }
+
+        const tilesData = JSON.parse(await zip.file('data.json').async('string'));
+
+        // Restore images
+        for (const tile of tilesData) {
+            if (tile.style && tile.style.image) {
+                // Check if image is relative (packed in zip) e.g. "icons/foo.png"
+                if (!tile.style.image.startsWith('http') && !tile.style.image.startsWith('data:') && !path.isAbsolute(tile.style.image)) {
+                    const zipImage = zip.file(tile.style.image);
+                    if (zipImage) {
+                        const ext = path.extname(tile.style.image);
+                        const newFilename = `${Date.now()}_imp_${Math.random().toString(36).substring(2, 10)}${ext}`;
+                        const destPath = path.join(imagesDirPath, newFilename);
+                        const content = await zipImage.async('nodebuffer');
+                        fs.writeFileSync(destPath, content);
+                        tile.style.image = compactPath(destPath);
+                    }
+                }
+            }
+        }
+
+        fs.writeFileSync(tilesFilePath, JSON.stringify(tilesData, null, 2), 'utf8');
+
+        // Reload window to apply changes
+        mainWindow.reload();
+        return { success: true };
+
+    } catch (error) {
+        console.error('Import failed:', error);
+        dialog.showErrorBox('Errore Importazione', `Impossibile importare il backup:\n${error.message}`);
+        return { success: false, error: error.message };
+    }
+});
 
 // --- Notes Management ---
 function getNotePaths(date) {

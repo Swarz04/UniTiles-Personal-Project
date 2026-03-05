@@ -4,31 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A.Scharmüller - UniTiles</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: file:; connect-src 'self' https:;">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header class="app-header">
-        <div class="header-left">
-            <button id="back-btn" class="nav-button" style="display: none;" title="Indietro">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24px" height="24px"><path d="M12.707 17.293 8.414 13H18v-2H8.414l4.293-4.293-1.414-1.414L4.586 12l6.707 6.707z"/></svg>
-            </button>
-            <button id="settings-btn" class="nav-button" title="Impostazioni">
-                ⚙️
-            </button>
-            <h1 id="app-title">A.Scharmüller - UniTiles</h1>
-            <div id="breadcrumb-container" class="breadcrumb-container"></div>
-        </div>
-        <div class="header-controls">
-            <button id="add-tile-btn" class="add-button">+</button>
-            <input type="text" id="search-input" placeholder="Cerca..." class="search-bar">
-        </div>
-    </header>
+    <div class="app-body-container">
+        <aside class="notes-sidebar">
+            <h2>Note</h2>
+            <textarea id="terminal-input" class="terminal-input" placeholder=">_ Scrivi qui..."></textarea>
+            <div class="notes-sidebar-footer">
+                <button id="save-note-btn" class="footer-btn" title="Salva nota del giorno">💾</button>
+                <button id="open-notes-btn" class="footer-btn" title="Apri cartella note">📂</button>
+            </div>
+        </aside>
 
-    <main class="tile-grid-container">
-        <div id="tiles-grid" class="tile-grid">
-            <!-- Tiles will be rendered here by app.js -->
+        <div class="main-content-wrapper">
+            <header class="app-header">
+                <div class="header-left">
+                    <button id="back-btn" class="nav-button" style="display: none;" title="Indietro">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24px" height="24px"><path d="M12.707 17.293 8.414 13H18v-2H8.414l4.293-4.293-1.414-1.414L4.586 12l6.707 6.707z"/></svg>
+                    </button>
+                    <button id="settings-btn" class="nav-button" title="Impostazioni">
+                        ⚙️
+                    </button>
+                    <h1 id="app-title">A.Scharmüller - UniTiles</h1>
+                    <div id="breadcrumb-container" class="breadcrumb-container"></div>
+                </div>
+                <div class="header-controls">
+                    <button id="add-tile-btn" class="add-button">+</button>
+                    <input type="text" id="search-input" placeholder="Cerca..." class="search-bar">
+                </div>
+            </header>
+
+            <main class="tile-grid-container">
+                <div id="tiles-grid" class="tile-grid">
+                    <!-- Tiles will be rendered here by app.js -->
+                </div>
+            </main>
         </div>
-    </main>
+    </div>
 
     <dialog id="add-tile-dialog">
         <h2>Aggiungi/Modifica Tile</h2>
@@ -76,6 +90,13 @@
             <p><strong>Versione:</strong> <span id="app-version">Loading...</span></p>
             <p><strong>Autore:</strong> A. Scharmüller</p>
             <p><strong>UniTiles</strong> è il tuo dashboard personale.</p>
+
+            <div class="settings-section">
+                <h3>Importa / Esporta</h3>
+                <p>Salva o carica un backup completo delle tue tessere e impostazioni.</p>
+                <button id="export-data-btn">Esporta Dati</button>
+                <button id="import-data-btn">Importa Dati</button>
+            </div>
         </div>
         <div class="form-actions">
             <button type="button" id="close-settings-btn">Chiudi</button>
@@ -94,11 +115,7 @@
 
     <footer class="app-footer">
         <div id="date-display" class="footer-item"></div>
-        <textarea id="terminal-input" class="footer-item terminal-input" placeholder=">_"></textarea>
-        <div class="footer-buttons">
-            <button id="save-note-btn" class="footer-btn" title="Salva nota del giorno">💾</button>
-            <button id="open-notes-btn" class="footer-btn" title="Apri cartella note">📂</button>
-        </div>
+        <div class="footer-separator">|</div>
         <div id="clock-display" class="footer-item"></div>
     </footer>
 

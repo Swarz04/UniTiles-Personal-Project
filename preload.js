@@ -1,5 +1,5 @@
 /**
- * UniTiles - Preload Script (v2.0)
+ * UniTiles - Preload Script (v2.1.0)
  * Author: A. Scharmüller
  */
 const { contextBridge, ipcRenderer } = require('electron');
@@ -20,6 +20,10 @@ contextBridge.exposeInMainWorld('api', {
     saveNote: (date, content) => ipcRenderer.invoke('note:save', { date, content }),
     getNote: (date) => ipcRenderer.invoke('note:get', date),
     openNotesFolder: () => ipcRenderer.invoke('notes:openFolder'),
+
+    // Data
+    exportData: (tiles) => ipcRenderer.invoke('data:export', tiles),
+    importData: () => ipcRenderer.invoke('data:import'),
 
     // Window events
     onBeforeUnload: (callback) => ipcRenderer.on('before-unload', callback),

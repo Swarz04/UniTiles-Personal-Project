@@ -1,5 +1,5 @@
 /**
- * UniTiles - Renderer Process (v2.0)
+ * UniTiles - Renderer Process (v2.1.0)
  * Author: A. Scharmüller
  */
 document.addEventListener('DOMContentLoaded', async () => {
@@ -172,17 +172,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         tileCard.setAttribute('draggable', 'true');
 
         // Ghost Tile Check
-        let isGhost = false;
         if ((tile.kind === 'exe' || tile.kind === 'file') && tile.data.path) {
-            const pathExists = await window.api.checkPath(tile.data.path);
-            if (!pathExists) {
-                isGhost = true;
-                tileCard.classList.add('ghost');
-                const badge = document.createElement('span');
-                badge.className = 'ghost-badge';
-                badge.textContent = '⚠️';
-                tileCard.appendChild(badge);
-            }
+            // Non blocchiamo il rendering con await. Usiamo .then() per aggiornare la UI quando pronto.
+            window.api.checkPath(tile.data.path).then(pathExists => {
+                if (!pathExists) {
+                    tileCard.classList.add('ghost');
+                    const badge = document.createElement('span');
+                    badge.className = 'ghost-badge';
+                    badge.textContent = '⚠️';
+                    tileCard.appendChild(badge);
+                }
+            });
         }
 
         // --- Drag & Drop Logic ---
@@ -239,6 +239,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
                 draggedTile.order = newOrder;
             }
+
+            // Normalizzazione: Reimposta gli ordini a numeri interi (10, 20, 30...)
+            // per evitare problemi con i decimali dopo molti spostamenti.
+            const siblings = allTiles.filter(t => t.parentId === targetTile.parentId);
+            siblings.sort((a, b) => a.order - b.order);
+            siblings.forEach((t, index) => {
+                t.order = (index + 1) * 10;
+            });
+
             await saveTiles();
             await renderTiles();
         });
@@ -317,7 +326,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // --- Click Action ---
         tileCard.addEventListener('click', () => {
-            if (isGhost) {
+            if (tileCard.classList.contains('ghost')) {
                 alert(`File non trovato per il tile "${tile.title}".`);
                 return;
             }
@@ -605,6 +614,27 @@ document.addEventListener('DOMContentLoaded', async () => {
             settingsDialog.close();
         });
 
+        // Export & Import Buttons
+        const exportBtn = document.getElementById('export-data-btn');
+        const importBtn = document.getElementById('import-data-btn');
+
+        if (exportBtn) {
+            exportBtn.addEventListener('click', async () => {
+                const result = await window.api.exportData(allTiles);
+                if (result.success) {
+                    alert('Backup esportato con successo!');
+                }
+            });
+        }
+
+        if (importBtn) {
+            importBtn.addEventListener('click', async () => {
+                if (confirm('Attenzione: Importando un backup, tutti i riquadri attuali verranno sostituiti. Continuare?')) {
+                    await window.api.importData();
+                }
+            });
+        }
+
         backBtn.addEventListener('click', () => {
             const currentFolder = allTiles.find(t => t.id === currentFolderId);
             currentFolderId = currentFolder ? currentFolder.parentId : null;
@@ -634,7 +664,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     // Move to parent of current folder (which is null if current folder is in root)
                     // But since we only support 1 level nesting effectively or flat structure with parentId,
                     // we need to find the parent of the current folder.
-                    const currentFolder = allTiles.find(t => t.id === currentFolderId);
+                    const currentFolder = currentFolderId ? allTiles.find(t => t.id === currentFolderId) : null;
                     tile.parentId = currentFolder ? currentFolder.parentId : null;
 
                     // Recalculate order to be at the end of the new list
