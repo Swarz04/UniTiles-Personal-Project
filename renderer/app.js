@@ -208,50 +208,53 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (!tileCard.contains(e.relatedTarget)) tileCard.classList.remove('drag-over');
         });
         tileCard.addEventListener('drop', async e => {
-            e.preventDefault();
-            tileCard.classList.remove('drag-over');
-            if (!draggedTileId || draggedTileId === tile.id) return;
+    e.preventDefault();
+    tileCard.classList.remove('drag-over');
+    if (!draggedTileId || draggedTileId === tile.id) return;
 
-            const draggedTile = allTiles.find(t => t.id === draggedTileId);
-            const targetTile = tile;
+    const draggedTile = allTiles.find(t => t.id === draggedTileId);
+    const targetTile = tile;
+    if (!draggedTile || !targetTile) return;
 
-            // Move to folder
-            if (targetTile.kind === 'folder') {
-                draggedTile.parentId = targetTile.id;
-                draggedTile.order = (allTiles.filter(t => t.parentId === targetTile.id).length + 1) * 10;
-            } else { // Reorder (insert between)
-                const contextTiles = allTiles.filter(t => t.parentId === targetTile.parentId).sort((a, b) => a.order - b.order);
-                const toIndex = contextTiles.findIndex(t => t.id === targetTile.id);
+    // --- MOVE INTO FOLDER ---
+    if (targetTile.kind === 'folder') {
+        draggedTile.parentId = targetTile.id;
 
-                // Calculate new order to insert "in between"
-                // If dropping on a tile, we place it before that tile
-                let newOrder;
-                if (toIndex === 0) {
-                    newOrder = targetTile.order / 2;
-                } else {
-                    const prevTile = contextTiles[toIndex - 1];
-                    // If the previous tile is the dragged tile itself, we are moving it down, so look at the one before that
-                    if (prevTile.id === draggedTile.id && toIndex > 1) {
-                         newOrder = (contextTiles[toIndex - 2].order + targetTile.order) / 2;
-                    } else {
-                         newOrder = (prevTile.order + targetTile.order) / 2;
-                    }
-                }
-                draggedTile.order = newOrder;
-            }
+        const siblings = allTiles.filter(t => t.parentId === targetTile.id);
+        siblings.push(draggedTile);
 
-            // Normalizzazione: Reimposta gli ordini a numeri interi (10, 20, 30...)
-            // per evitare problemi con i decimali dopo molti spostamenti.
-            const siblings = allTiles.filter(t => t.parentId === targetTile.parentId);
-            siblings.sort((a, b) => a.order - b.order);
-            siblings.forEach((t, index) => {
-                t.order = (index + 1) * 10;
-            });
-
-            await saveTiles();
-            await renderTiles();
+        siblings.forEach((t, index) => {
+            t.order = (index + 1) * 10;
         });
+    }
+    // --- REORDER ---
+    draggedTile.parentId = targetTile.parentId;
 
+const siblings = allTiles
+    .filter(t => t.parentId === targetTile.parentId && t.id !== draggedTileId)
+    .sort((a, b) => a.order - b.order);
+
+const targetIndex = siblings.findIndex(t => t.id === targetTile.id);
+
+// 👇 QUI STA LA MAGIA
+const rect = tileCard.getBoundingClientRect();
+const offsetX = e.clientX - rect.left;
+const isRightSide = offsetX > rect.width / 2;
+
+// Se sei a destra → dopo
+// Se sei a sinistra → prima
+const insertIndex = isRightSide ? targetIndex + 1 : targetIndex;
+
+siblings.splice(insertIndex, 0, draggedTile);
+
+// normalizzazione
+siblings.forEach((t, index) => {
+    t.order = (index + 1) * 10;
+});
+
+    await saveTiles();
+    await renderTiles();
+});
         // --- Visuals ---
         if (tile.kind === 'folder') {
             const previewDiv = document.createElement('div');
